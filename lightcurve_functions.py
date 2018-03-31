@@ -39,7 +39,7 @@ def compute_oorb_astroidcentric_helio_and_toppo_vectors_with_JD(oorb_location, i
     delta_m = delta_au * au_to_meters
     light_time_travel_days = (delta_m/3e8) / (24*3600.)
     JD_light_time_corrected = JD - light_time_travel_days
-    #os.system('rm *' + id_8)
+    os.system('rm *' + id_8 + '*')
     return np.vstack((JD_light_time_corrected, m, astro_hel_x, astro_hel_y, astro_hel_z, astro_toppo_x, astro_toppo_y, astro_toppo_z)).T
 
 def get_rates(rate, pa, dec_deg, dec_min, dec_sec): #rate is in "/min, pa is in degs
@@ -133,6 +133,8 @@ def run_lightcurve_code(JD_helxyz_obs_xyz_array, asteroid_name, shape_model_dire
     (JD_helxyz_obs_xyz_array[:,0], intensities)
     JD_intensity = np.vstack((JD_helxyz_obs_xyz_array[:,0], intensities)).T
     np.savetxt(result_file_name ,JD_intensity)
+    os.system('rm lc'+ id_generator_lc + '*')
+
 
 def string_seperated_to_array_spaces(input_array,data_type_str):
     input_array = ",".join(input_array)

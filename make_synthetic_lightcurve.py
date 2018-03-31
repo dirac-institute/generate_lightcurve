@@ -9,7 +9,9 @@ from lightcurve_functions import *
 '''
 sample execution:
 
-ipython -i -- make_synthetic_lightcurve.py -lcc /Users/bolin/NEO/lightcurves/version_0.2.1/lcgenerator/lcgenerator -smd /Users/bolin/NEO/lightcurves/version_0.2.1/shapemodels -mpcorbf /Users/bolin/Thermal/asteroid_lists/MPCORB.DAT -ooloc /Users/bolin/NEO/OpenOrb/oorb-master/main/oorb -an 306 -stetss 57303 57335 0.0025
+ipython -i -- make_synthetic_lightcurve.py -lcc /Users/bolin/NEO/lightcurves/version_0.2.1/lcgenerator/lcgenerator -smd /Users/bolin/NEO/lightcurves/version_0.2.1/shapemodels -mpcorbf /Users/bolin/Thermal/asteroid_lists/MPCORB.DAT -ooloc /Users/bolin/NEO/OpenOrb/oorb-master/main/oorb -an 306 -stetss 57303 57320 0.0025
+
+ipython -i -- make_synthetic_lightcurve.py -lcc /Users/bolin/NEO/lightcurves/version_0.2.1/lcgenerator/lcgenerator -smd /Users/bolin/NEO/lightcurves/version_0.2.1/shapemodels -mpcorbf /Users/bolin/Thermal/asteroid_lists/MPCORB.DAT -ooloc /Users/bolin/NEO/OpenOrb/oorb-master/main/oorb -an 3200 -stetss 59323 59345 0.0025
 
 must be careful you dont require the generation of more than 10,000 lightcurve datapoints. lcgenerator can't handle more than 10,000.
 
@@ -41,3 +43,5 @@ os.system(echo_orbit_line_to_des)
 JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z = compute_oorb_astroidcentric_helio_and_toppo_vectors_with_JD(oorb_location,orbit_file_name, start_time_mjd, end_time_mjd, step_size_days, orbit_file_name)
 
 run_lightcurve_code(JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z, asteroid_name, shape_model_directory, lightcurve_code, start_time_mjd, end_time_mjd)
+os.system('rm *' + id_generator_orb + '*')
+
