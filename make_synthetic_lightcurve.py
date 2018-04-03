@@ -49,12 +49,13 @@ os.system('rm *' + id_generator_orb + '*')
 import matplotlib.pyplot as plt
 plt.ion()
 plt.figure()
-JD_intensity306 = np.loadtxt('306_lc_57303_to_57320.txt')
+#JD_intensity306 = np.loadtxt('306_lc_57303_to_57320.txt')
+JD_intensity306 = np.loadtxt('306_lc_44113_to_44113.txt')
 plt.plot(JD_intensity306[:,0], JD_intensity306[:,1])
 plt.xlabel('JD')
 plt.ylabel('Relative intensity')
 plt.xlim(10.0+2.4573e6,10.5+2.4573e6)
-plt.savefig('306_lc_57303_to_57320.png')
+plt.savefig('306_lc_57309_5_to_57310_0.png')
 
 plt.figure()
 JD_intensity3200 = np.loadtxt('3200_lc_59323_to_59345.txt')
@@ -62,7 +63,7 @@ plt.plot(JD_intensity3200[:,0], JD_intensity3200[:,1])
 plt.xlabel('JD')
 plt.ylabel('Relative intensity')
 plt.xlim(30.0+2.4593e6,30.5+2.4593e6)
-plt.savefig('3200_lc_59323_to_59345.png')
+plt.savefig('3200_lc_59329_5_to_59330_0.png')
 
 
 '''
