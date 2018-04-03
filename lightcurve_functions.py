@@ -121,6 +121,41 @@ def M_anom_and_mean_motion_to_time_of_peri(M,n,epoch_mjd_ut): #both M and n are 
         time_peri = epoch_mjd_ut - (M / n)
     return time_peri
 
+def convert_MPC_packed_date_to_mjd_integer(packed_date):#see http://www.minorplanetcenter.net/iau/info/PackedDes.html
+    """
+    1999 RB252
+    The pairs of numbers are converted to letters
+    the letter sequence is 0...9A...Za...z
+    and you just split the units as
+    19 9 9 R B 25 2
+    convert each numeric block to the corresponding letter
+    and then move the third last to the endo
+    19->J
+    9->9
+    9->9
+    R->R
+    B->B
+    25->P
+    2->2
+    create the sequence with the third last at the end
+    J 9 9 R P 2 B
+    """
+    space = " "
+    num_characters = len(packed_date)
+    mpc_century = {'J': '19', 'K': '20'};
+    mpc_decade_year = {'0':'0','1':'1','2':'2','3':'3','4':'4','5':'5','6':'6','7':'7','8':'8','9':'9'};
+    mpc_monthly_cycle_alphabet = {'0':'','1':'1','2':'2','3':'3','4':'4','5':'5','6':'6','7':'7','8':'8','9':'9',
+                                  'A':'10','B':'11','C':'12','D':'13','E':'14','F':'15','G':'16','H':'17','I':'18','J':'19',
+                                  'K':'20','L':'21','M':'22','N':'23','O':'24','P':'25','Q':'26','R':'27','S':'28','T':'29',
+                                  'U':'30','V':'31','W':'32','X':'33','Y':'34','Z':'35','a':'36','b':'37','c':'38','d':'39',
+                                  'e':'40','f':'41','g':'42','h':'43','i':'44','j':'45','k':'46','l':'47','m':'48','n':'49',
+                                  'o':'50','p':'51','q':'52','r':'53','s':'54','t':'55','u':'56','v':'57','w':'58','x':'59',
+                                  'y':'60','z':'61'};
+    year = mpc_century[packed_date[0]] + mpc_decade_year[packed_date[1]] + mpc_decade_year[packed_date[2]]
+    month = mpc_monthly_cycle_alphabet[packed_date[3]]
+    date = mpc_monthly_cycle_alphabet[packed_date[4]]
+    return year, month, date
+
 def run_lightcurve_code(JD_helxyz_obs_xyz_array, asteroid_name, shape_model_directory, lightcurve_code, start_time_mjd, end_time_mjd):
     id_generator_lc = id_generator()
     result_file_name = asteroid_name + '_lc_' + str(int(start_time_mjd)) +'_to_' + str(int(end_time_mjd))  + '.txt'
