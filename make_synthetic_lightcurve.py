@@ -46,11 +46,13 @@ run_lightcurve_code(JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astr
 os.system('rm *' + id_generator_orb + '*')
 
 '''
+JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[:,2:]
+
 import matplotlib.pyplot as plt
 plt.ion()
 plt.figure()
-#JD_intensity306 = np.loadtxt('306_lc_57303_to_57320.txt')
-JD_intensity306 = np.loadtxt('306_lc_44113_to_44113.txt')
+JD_intensity306 = np.loadtxt('306_lc_57303_to_57320.txt')
+#JD_intensity306 = np.loadtxt('306_lc_44113_to_44113.txt')
 plt.plot(JD_intensity306[:,0], JD_intensity306[:,1])
 plt.xlabel('JD')
 plt.ylabel('Relative intensity')

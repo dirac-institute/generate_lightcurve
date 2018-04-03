@@ -20,10 +20,32 @@ au_to_meters = 149597870700.0
 def compute_oorb_astroidcentric_helio_and_toppo_vectors_with_JD(oorb_location, in_orbit_file_des, start_date_mjd, end_date_mjd, time_step_days, orbit_file_name):
     id_8 = id_generator()
     oorb_command_prop = oorb_location + " --task=propagation --orb-in=" + in_orbit_file_des
-    oorb_command_prop_complete = oorb_command_prop + " " + "--epoch-mjd-tt=" + str(start_date_mjd) + " " + "> " + "in_orb" + id_8 + ".des"
+    oorb_command_prop_complete = oorb_command_prop + " " + "--epoch-mjd-utc=" + str(start_date_mjd) + " " + "> " + "in_orb" + id_8 + ".des"
     os.system(oorb_command_prop_complete)
     duration = end_date_mjd - start_date_mjd
-    oorb_command_ephem = oorb_location + " --task=ephemeris --code=500 --orb-in=in_orb" + id_8 + ".des " + "--timespan=" + str(duration) + " " + "--step=" + str(time_step_days) + " > ephem_" + id_8
+    oorb_command_ephem = oorb_location + " --task=ephemeris --code=500 --orb-in=in_orb" + id_8 + ".des " + "--timespan=" + str(duration) + " " + "--step=" + str(time_step_days)+ " " + "--epoch-mjd-utc=" + str(start_date_mjd) + " > ephem_" + id_8
+    os.system(oorb_command_ephem)
+    load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z = np.loadtxt("ephem_" + id_8, usecols=(28,29,30,34,35,36,2,3,9))
+    obs_x, obs_y, obs_z = load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z[:,3], load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z[:,4], load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z[:,5]
+    hel_x, hel_y, hel_z = load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z[:,0], load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z[:,1], load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z[:,2]
+    toppo_x, toppo_y, toppo_z = hel_x - obs_x, hel_y - obs_y, hel_z - obs_z
+    astro_toppo_x, astro_toppo_y, astro_toppo_z = -1.0 * toppo_x, -1.0 * toppo_y, -1.0 * toppo_z
+    astro_hel_x, astro_hel_y, astro_hel_z = -1.0 * hel_x, -1.0 * hel_y, -1.0 * hel_z
+    JD = load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z[:,6] + 2400000.5
+    delta_au = load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z[:,7]
+    #mags
+    m = load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z[:,8]
+    #light_time_correction
+    delta_m = delta_au * au_to_meters
+    light_time_travel_days = (delta_m/3e8) / (24*3600.)
+    JD_light_time_corrected = JD - light_time_travel_days
+    os.system('rm *' + id_8 + '*')
+    return np.vstack((JD_light_time_corrected, m, astro_hel_x, astro_hel_y, astro_hel_z, astro_toppo_x, astro_toppo_y, astro_toppo_z)).T
+
+def compute_oorb_astroidcentric_helio_and_toppo_vectors_with_JD_V2(oorb_location, in_orbit_file_des, start_date_mjd, end_date_mjd, time_step_days, orbit_file_name):
+    id_8 = id_generator()
+    duration = end_date_mjd - start_date_mjd
+    oorb_command_ephem = oorb_location + " --task=ephemeris --code=500 --orb-in=" + in_orbit_file_des +" --epoch-mjd-utc=" + str(start_date_mjd) +  " --timespan=" + str(duration) + " " + "--step=" + str(time_step_days) + " > ephem_" + id_8
     os.system(oorb_command_ephem)
     load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z = np.loadtxt("ephem_" + id_8, usecols=(28,29,30,34,35,36,2,3,9))
     obs_x, obs_y, obs_z = load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z[:,3], load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z[:,4], load_orbit_helio_x_helio_y_helio_z_obs_x_obs_y_obs_z[:,5]
