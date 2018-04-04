@@ -9,6 +9,8 @@ from lightcurve_functions import *
 '''
 sample execution:
 
+test
+
 ipython -i -- make_synthetic_lightcurve.py -lcc /Users/bolin/NEO/lightcurves/version_0.2.1/lcgenerator/lcgenerator -smd /Users/bolin/NEO/lightcurves/version_0.2.1/shapemodels -mpcorbf /Users/bolin/Thermal/asteroid_lists/MPCORB.DAT -ooloc /Users/bolin/NEO/OpenOrb/oorb-master/main/oorb -an 306 -stetss 57303 57320 0.0025
 
 ipython -i -- make_synthetic_lightcurve.py -lcc /Users/bolin/NEO/lightcurves/version_0.2.1/lcgenerator/lcgenerator -smd /Users/bolin/NEO/lightcurves/version_0.2.1/shapemodels -mpcorbf /Users/bolin/Thermal/asteroid_lists/MPCORB.DAT -ooloc /Users/bolin/NEO/OpenOrb/oorb-master/main/oorb -an 306 -stetss 44113.0 44114 0.002
