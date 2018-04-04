@@ -11,7 +11,11 @@ sample execution:
 
 ipython -i -- make_synthetic_lightcurve.py -lcc /Users/bolin/NEO/lightcurves/version_0.2.1/lcgenerator/lcgenerator -smd /Users/bolin/NEO/lightcurves/version_0.2.1/shapemodels -mpcorbf /Users/bolin/Thermal/asteroid_lists/MPCORB.DAT -ooloc /Users/bolin/NEO/OpenOrb/oorb-master/main/oorb -an 306 -stetss 57303 57320 0.0025
 
+ipython -i -- make_synthetic_lightcurve.py -lcc /Users/bolin/NEO/lightcurves/version_0.2.1/lcgenerator/lcgenerator -smd /Users/bolin/NEO/lightcurves/version_0.2.1/shapemodels -mpcorbf /Users/bolin/Thermal/asteroid_lists/MPCORB.DAT -ooloc /Users/bolin/NEO/OpenOrb/oorb-master/main/oorb -an 306 -stetss 44113.0 44114 0.002
+
 ipython -i -- make_synthetic_lightcurve.py -lcc /Users/bolin/NEO/lightcurves/version_0.2.1/lcgenerator/lcgenerator -smd /Users/bolin/NEO/lightcurves/version_0.2.1/shapemodels -mpcorbf /Users/bolin/Thermal/asteroid_lists/MPCORB.DAT -ooloc /Users/bolin/NEO/OpenOrb/oorb-master/main/oorb -an 3200 -stetss 59323 59345 0.0025
+
+ipython -i -- make_synthetic_lightcurve.py -lcc /Users/bolin/NEO/lightcurves/version_0.2.1/lcgenerator/lcgenerator -smd /Users/bolin/NEO/lightcurves/version_0.2.1/shapemodels -mpcorbf /Users/bolin/Thermal/asteroid_lists/MPCORB.DAT -ooloc /Users/bolin/NEO/OpenOrb/oorb-master/main/oorb -an 3200 -stetss 49657.875099 49658.875099 0.0025
 
 must be careful you dont require the generation of more than 10,000 lightcurve datapoints. lcgenerator can't handle more than 10,000.
 
@@ -51,21 +55,24 @@ JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_top
 import matplotlib.pyplot as plt
 plt.ion()
 plt.figure()
-JD_intensity306 = np.loadtxt('306_lc_57303_to_57320.txt')
-#JD_intensity306 = np.loadtxt('306_lc_44113_to_44113.txt')
+#JD_intensity306 = np.loadtxt('306_lc_57303_to_57320.txt')
+JD_intensity306 = np.loadtxt('306_lc_44113_to_44114.txt')
 plt.plot(JD_intensity306[:,0], JD_intensity306[:,1])
 plt.xlabel('JD')
 plt.ylabel('Relative intensity')
-plt.xlim(10.0+2.4573e6,10.5+2.4573e6)
+plt.xlim(3.5+2.44411e6,4+2.44411e6)
 plt.savefig('306_lc_57309_5_to_57310_0.png')
 
+import matplotlib.pyplot as plt
+plt.ion()
 plt.figure()
-JD_intensity3200 = np.loadtxt('3200_lc_59323_to_59345.txt')
+#JD_intensity3200 = np.loadtxt('3200_lc_59323_to_59345.txt')
+JD_intensity3200 = np.loadtxt('3200_lc_49657_to_49658.txt')
 plt.plot(JD_intensity3200[:,0], JD_intensity3200[:,1])
 plt.xlabel('JD')
 plt.ylabel('Relative intensity')
-plt.xlim(30.0+2.4593e6,30.5+2.4593e6)
-plt.savefig('3200_lc_59329_5_to_59330_0.png')
+plt.xlim(8.5+2.44965e6,9.0+2.44965e6)
+plt.savefig('3200_lc_49658_to_49658_5.png')
 
 
 '''

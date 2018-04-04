@@ -94,7 +94,7 @@ def grep_asteroid_from_MPCORBDAT_to_KEP_DES_format(asteroid_numbered_name, mpc_o
     id_8 = id_generator()
     des_suffix = '1 6 -1 OpenOrb'
     kep_string = 'KEP'
-    awk_command = '''awk '{print $'1', $'11', $'9', $'8', $'7', $'6', $'5', $'2', $'24'}' '''
+    awk_command = '''awk '{print $'1', $'11', $'9', $'8', $'7', $'6', $'5', $'2', $'4'}' '''
     space = " "
 
     asteroid_name_paren = '(' + asteroid_numbered_name + ')'
@@ -103,10 +103,8 @@ def grep_asteroid_from_MPCORBDAT_to_KEP_DES_format(asteroid_numbered_name, mpc_o
     os.system(awk_command + ' < ' + 'temp_grep_'+ id_8 + ' > temp_awk_' + id_8)
     #number_a_au_e_i_deg_Omega_deg_omega_deg_M_deg_H_epoch_YMD
     awk_output = np.loadtxt('temp_awk_' + id_8, dtype='string')
-    year = float(awk_output[8][:4])
-    month = float(awk_output[8][4:6])
-    day = float(awk_output[8][6:])
-    mjd = sla.sla_caldj(year, month, day)[0]
+    year, month, day = convert_MPC_packed_date_to_year_month_date(awk_output[8])
+    mjd = sla.sla_caldj(float(year), float(month), float(day))[0]
     des_out = awk_output[0] + " KEP " + awk_output[1] + space + awk_output[2]  + space + awk_output[3] + space + awk_output[4] + space + awk_output[5] + space + awk_output[6] + space + awk_output[7] + space + str(mjd) + space + des_suffix
     os.system('rm *' + id_8)
     return des_out
@@ -121,7 +119,7 @@ def M_anom_and_mean_motion_to_time_of_peri(M,n,epoch_mjd_ut): #both M and n are 
         time_peri = epoch_mjd_ut - (M / n)
     return time_peri
 
-def convert_MPC_packed_date_to_mjd_integer(packed_date):#see http://www.minorplanetcenter.net/iau/info/PackedDes.html
+def convert_MPC_packed_date_to_year_month_date(packed_date):#see http://www.minorplanetcenter.net/iau/info/PackedDes.html
     """
     1999 RB252
     The pairs of numbers are converted to letters
