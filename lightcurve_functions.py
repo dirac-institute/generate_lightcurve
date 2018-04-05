@@ -1,19 +1,12 @@
-from __future__ import print_function
-import pylab as plt
-
+#bryce bolin
 import string
 import os
 import numpy as np
-import warnings
 import re
 import argparse
 import sys
-import glob
-import glob
-import argparse
-import pyslalib.slalib as sla
+from astropy.time import Time
 import random
-
 
 au_to_meters = 149597870700.0
 
@@ -96,7 +89,6 @@ def grep_asteroid_from_MPCORBDAT_to_KEP_DES_format(asteroid_numbered_name, mpc_o
     kep_string = 'KEP'
     awk_command = '''awk '{print $'1', $'11', $'9', $'8', $'7', $'6', $'5', $'2', $'4'}' '''
     space = " "
-
     asteroid_name_paren = '(' + asteroid_numbered_name + ')'
     grep_command_asteroid = '''grep "''' + asteroid_name_paren + '''"''' + " " + mpc_orb_dat_location + " > temp_grep_" + id_8
     os.system(grep_command_asteroid)
@@ -104,7 +96,9 @@ def grep_asteroid_from_MPCORBDAT_to_KEP_DES_format(asteroid_numbered_name, mpc_o
     #number_a_au_e_i_deg_Omega_deg_omega_deg_M_deg_H_epoch_YMD
     awk_output = np.loadtxt('temp_awk_' + id_8, dtype='string')
     year, month, day = convert_MPC_packed_date_to_year_month_date(awk_output[8])
-    mjd = sla.sla_caldj(float(year), float(month), float(day))[0]
+    times = [year + '-'+ month + '-' + day]
+    t = Time(times, scale='utc')
+    mjd = t.mjd[0]
     des_out = awk_output[0] + " KEP " + awk_output[1] + space + awk_output[2]  + space + awk_output[3] + space + awk_output[4] + space + awk_output[5] + space + awk_output[6] + space + awk_output[7] + space + str(mjd) + space + des_suffix
     os.system('rm *' + id_8)
     return des_out

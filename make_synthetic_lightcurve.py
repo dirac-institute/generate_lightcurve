@@ -1,7 +1,4 @@
 #Bryce Bolin
-import random
-import argparse
-import pyslalib.slalib as sla
 import sys
 sys.path.insert(0, '/Users/bolin/NEO/lightcurves/scripts/')
 from lightcurve_functions import *
