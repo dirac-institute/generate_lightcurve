@@ -69,12 +69,12 @@ model_number_asteroid_name_shape_model_version = np.loadtxt('shapemodels/db_expo
 damit_asteroid_number = model_number_asteroid_name_shape_model_version[np.where(model_number_asteroid_name_shape_model_version[:,1]==asteroid_name)][0][0]
 model_number = model_number_asteroid_name_shape_model_version[np.where(model_number_asteroid_name_shape_model_version[:,1]==asteroid_name)][0][-1]
 identifier = model_number_asteroid_name_shape_model_version[np.where(model_number_asteroid_name_shape_model_version[:,1]==asteroid_name)][0][0]
-if not os.path.isdir('./shapemodels/'+asteroid_name + '/'):os.system('mkdir shapemodels/'+asteroid_name)
 
 if not os.path.exists("shapemodels/db_export_simple.php"):os.system('wget -r -np -nd http://astro.troja.mff.cuni.cz/projects/asteroids3D/php/spin.txt.php?model_id='++'; mv db_export_simple.php shapemodels')
 
 
 if not os.path.isdir('shapemodels/'+ asteroid_name):
+    os.system('mkdir shapemodels/'+asteroid_name)
     os.system('wget -r -np -nd http://astro.troja.mff.cuni.cz/projects/asteroids3D/php/spin.txt.php?model_id=' + model_number + '; mv spin.txt.php?model_id=' + model_number + ' shapemodels/'+asteroid_name)
     if int(damit_asteroid_number) < 1000:
         os.system('wget -r -np -nd http://astro.troja.mff.cuni.cz/projects/asteroids3D/data/archive/1-1000/A'+ damit_asteroid_number+ '.M' + model_number + '.shape.txt; mv A'+ damit_asteroid_number+ '.M' + model_number + '.shape.txt shapemodels/'+ asteroid_name)
@@ -126,6 +126,16 @@ plt.xlabel('JD')
 plt.ylabel('Relative intensity')
 #plt.savefig('890_lc_44113_to_44124.png')
 
+#1641
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+JD_intensity890 = np.loadtxt('1641_lc_44113_to_44120.txt')
+plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
+
+
 #1723
 import matplotlib.pyplot as plt
 plt.ion()
@@ -136,7 +146,7 @@ plt.xlabel('JD')
 plt.ylabel('Relative intensity')
 #plt.savefig('1723_lc_46313_to_46324.png')
 
-#4077 candidate
+#4077
 import matplotlib.pyplot as plt
 plt.ion()
 plt.figure()
@@ -145,7 +155,7 @@ plt.plot(JD_intensity1723[:,0], JD_intensity1723[:,1],'-')
 plt.xlabel('JD')
 plt.ylabel('Relative intensity')
 
-#4800 candidate
+#4800
 import matplotlib.pyplot as plt
 plt.ion()
 plt.figure()
