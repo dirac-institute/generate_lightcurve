@@ -176,7 +176,7 @@ def run_lightcurve_code(JD_helxyz_obs_xyz_array, asteroid_name, shape_model_dire
             os.system('cat ' + lc_file_name_array_temp + ' >> ' +  lc_file_name_tmp)
     shape_mode_asteroid_directory = shape_model_directory + '/' + asteroid_name + '/'
 
-    lcgenerator_command = 'cat ' + lc_file_name_tmp + ' | ' + lightcurve_code + ' -v ' + shape_mode_asteroid_directory +  '*.spin.txt ' + shape_mode_asteroid_directory + '*.shape.txt ' + result_file_name
+    lcgenerator_command = 'cat ' + lc_file_name_tmp + ' | ' + lightcurve_code + ' -v ' + shape_mode_asteroid_directory +  '*spin* ' + shape_mode_asteroid_directory + '*shape* ' + result_file_name
     os.system(lcgenerator_command)
     intensities = np.loadtxt(result_file_name)
     (JD_helxyz_obs_xyz_array[:,0], intensities)
