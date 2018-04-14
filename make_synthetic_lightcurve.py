@@ -22,6 +22,9 @@ ipython -i -- make_synthetic_lightcurve.py -an 487 -stetss 44113.0 44124.0 0.002
 #890
 ipython -i -- make_synthetic_lightcurve.py -an 890 -stetss 44113.0 44124.0 0.002
 
+#1388
+ipython -i -- make_synthetic_lightcurve.py -an 1388 -stetss 46313.0 46324.0 0.002
+
 #1723
 ipython -i -- make_synthetic_lightcurve.py -an 1723 -stetss 46313.0 46324.0 0.002
 
@@ -37,6 +40,12 @@ ipython -i -- make_synthetic_lightcurve.py -an 4800 -stetss 44113.0 44120.0 0.00
 ipython -i -- make_synthetic_lightcurve.py -an 6136 -stetss 44113.0 44120.0 0.001
 
 #for paper
+
+#1291
+ipython -i -- make_synthetic_lightcurve.py -an 1291 -stetss 44113.0 44120.0 0.001
+
+#1388
+ipython -i -- make_synthetic_lightcurve.py -an 1388 -stetss 44113.0 44120.0 0.001
 
 #3200
 ipython -i -- make_synthetic_lightcurve.py -an 3200 -stetss 49657 49668 0.0025
@@ -125,6 +134,63 @@ plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
 plt.xlabel('JD')
 plt.ylabel('Relative intensity')
 #plt.savefig('890_lc_44113_to_44124.png')
+
+#1291 2nd one
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+JD_intensity890 = np.loadtxt('1291_lc_44113_to_44120.txt')
+plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
+
+
+#1339
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+JD_intensity890 = np.loadtxt('1339_lc_44113_to_44120.txt')
+plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
+#plt.savefig('890_lc_44113_to_44124.png')
+
+#1353
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+JD_intensity890 = np.loadtxt('1353_lc_44113_to_44120.txt')
+plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'.')
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
+
+
+#1364
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+JD_intensity890 = np.loadtxt('1364_lc_44113_to_44120.txt')
+plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'.')
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
+
+#1388 best so far
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+JD_intensity890 = np.loadtxt('1388_lc_44113_to_44120.txt')
+plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
+
+#1557
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+JD_intensity890 = np.loadtxt('1557_lc_44113_to_44120.txt')
+plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
 
 #1641
 import matplotlib.pyplot as plt
