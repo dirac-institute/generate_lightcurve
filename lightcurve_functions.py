@@ -148,10 +148,9 @@ def convert_MPC_packed_date_to_year_month_date(packed_date):#see http://www.mino
     date = mpc_monthly_cycle_alphabet[packed_date[4]]
     return year, month, date
 
-def run_lightcurve_code(JD_helxyz_obs_xyz_array, asteroid_name, shape_model_directory, lightcurve_code, start_time_mjd, end_time_mjd):
+def run_lightcurve_code(JD_helxyz_obs_xyz_array, asteroid_name, shape_model_directory, lightcurve_code, start_time_mjd, end_time_mjd, file_id):
     id_generator_lc = id_generator()
-    result_file_name = asteroid_name + '_lc_' + str(int(start_time_mjd)) +'_to_' + str(int(end_time_mjd))  + '.txt'
-
+    result_file_name = asteroid_name + '_compile_lc_' + str(int(start_time_mjd)) +'_to_' + str(int(end_time_mjd)) + '_' + id_generator_orb + '_.txt'
     if len(JD_helxyz_obs_xyz_array)< 1001:
         lc_file_name = 'lc'+ id_generator_lc +'.txt'
         lc_file_name_tmp = 'lc'+ id_generator_lc +'.txttmp'

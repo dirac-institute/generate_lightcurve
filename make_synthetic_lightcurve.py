@@ -99,7 +99,19 @@ os.system(echo_orbit_line_to_des)
 
 JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z = compute_oorb_astroidcentric_helio_and_toppo_vectors_with_JD(oorb_location,orbit_file_name, start_time_mjd, end_time_mjd, step_size_days, orbit_file_name)
 
-run_lightcurve_code(JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z, asteroid_name, shape_model_directory, lightcurve_code, start_time_mjd, end_time_mjd)
+MJD_times = JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[:,0]-2400000.5
+
+if len(MJD_times) < 10000:
+    run_lightcurve_code(JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z, asteroid_name, shape_model_directory, lightcurve_code, start_time_mjd, end_time_mjd, id_generator_orb)
+
+if len(MJD_times) > 10000:
+    fraction_left, times_around = np.modf(len(MJD_times)/10000.)
+    for j in range(0, int(times_around)):
+        run_lightcurve_code(JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[int((j)*1000):int((j+1)*1000)], asteroid_name, shape_model_directory, lightcurve_code, MJD_times[int((j)*1000)], MJD_times[int((j+1)*1000)], id_generator_orb)
+    if fraction_left > 0.0:
+        run_lightcurve_code(JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[int((i+1)*1000):], asteroid_name, shape_model_directory, lightcurve_code, MJD_times[int((i+1)*1000)], MJD_times[0], id_generator_orb)
+
+os.system('echo *_compile_lc_*'+id_generator_orb + '* > ' + result_file_name)
 os.system('rm *' + id_generator_orb + '*')
 
 '''
