@@ -39,16 +39,21 @@ ipython -i -- make_synthetic_lightcurve.py -an 4800 -stetss 44113.0 44120.0 0.00
 
 ipython -i -- make_synthetic_lightcurve.py -an 6136 -stetss 44113.0 44120.0 0.001
 
+#3200
+ipython -i -- make_synthetic_lightcurve.py -an 3200 -stetss 49657 49668 0.0025
+
+
 #for paper
 
 #1291
-ipython -i -- make_synthetic_lightcurve.py -an 1291 -stetss 44113.0 44120.0 0.001
+ipython -i -- make_synthetic_lightcurve.py -an 1291 -stetss 49627.0 49787.0 0.0003472
 
 #1388
-ipython -i -- make_synthetic_lightcurve.py -an 1388 -stetss 44113.0 44120.0 0.001
+ipython -i -- make_synthetic_lightcurve.py -an 1388 -stetss 49627.0 49787.0 0.0003472
 
 #3200
-ipython -i -- make_synthetic_lightcurve.py -an 3200 -stetss 49657 49668 0.0025
+ipython -i -- make_synthetic_lightcurve.py -an 3200 -stetss 49627.0 49787.0 0.0003472
+
 
 must be careful you dont require the generation of more than 10,000 lightcurve datapoints. lcgenerator can't handle more than 10,000.
 
@@ -113,7 +118,7 @@ if len(MJD_times) > 10000:
 
 result_file_name = asteroid_name + '_lc_' + str(int(start_time_mjd)) +'_to_' + str(int(end_time_mjd)) + '.txt'
 os.system('cat *_compile_lc_*'+id_generator_orb + '* > ' + result_file_name)
-#os.system('rm *' + id_generator_orb + '*')
+os.system('rm *' + id_generator_orb + '*')
 
 '''
 JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[:,2:]
@@ -152,7 +157,7 @@ plt.ylabel('Relative intensity')
 import matplotlib.pyplot as plt
 plt.ion()
 plt.figure()
-JD_intensity890 = np.loadtxt('1291_lc_44113_to_44120.txt')
+JD_intensity890 = np.loadtxt('1291_lc_44113_to_44180.txt')
 plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
 plt.xlabel('JD')
 plt.ylabel('Relative intensity')
@@ -264,6 +269,53 @@ plt.ylabel('Relative intensity')
 #plt.savefig('3200_lc_49658_to_49658_5.png')
 
 
+#for paper
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+JD_intensity890 = np.loadtxt('1291_lc_44113_to_44180.txt')
+plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
 
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+JD_intensity890 = np.loadtxt('1388_lc_44113_to_44120.txt')
+plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
+
+
+#paper
+
+#1291
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+JD_intensity890 = np.loadtxt('1291_lc_49657_to_49717.txt')
+plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
+
+#1388
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+JD_intensity890 = np.loadtxt('1388_lc_49657_to_49717.txt')
+plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
+
+#3200
+
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+#JD_intensity3200 = np.loadtxt('3200_lc_44113_to_44173.txt')
+JD_intensity3200 = np.loadtxt('3200_lc_49627_to_49787.txt')
+plt.plot(JD_intensity3200[:,0], JD_intensity3200[:,1])
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
 
 '''
