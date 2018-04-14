@@ -1,5 +1,9 @@
 # generate_lightcurve
 
+#sample execution
+ipython -i -- make_synthetic_lightcurve.py -an 3200 -stetss 49627.0 49787.0 0.0003472
+
+
 Readme coming soon.
 
 Important to do:

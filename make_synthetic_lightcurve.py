@@ -54,6 +54,9 @@ ipython -i -- make_synthetic_lightcurve.py -an 1388 -stetss 49627.0 49787.0 0.00
 #3200
 ipython -i -- make_synthetic_lightcurve.py -an 3200 -stetss 49627.0 49787.0 0.0003472
 
+#221
+ipython -i -- make_synthetic_lightcurve.py -an 221 -stetss 49627.0 49787.0 0.0003472
+
 
 must be careful you dont require the generation of more than 10,000 lightcurve datapoints. lcgenerator can't handle more than 10,000.
 
@@ -304,6 +307,16 @@ plt.ion()
 plt.figure()
 JD_intensity890 = np.loadtxt('1388_lc_49657_to_49717.txt')
 plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
+plt.xlabel('JD')
+plt.ylabel('Relative intensity')
+
+#221
+
+import matplotlib.pyplot as plt
+plt.ion()
+plt.figure()
+JD_intensity3200 = np.loadtxt('221_lc_49627_to_49787.txt')
+plt.plot(JD_intensity3200[:,0], JD_intensity3200[:,1])
 plt.xlabel('JD')
 plt.ylabel('Relative intensity')
 
