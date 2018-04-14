@@ -150,7 +150,7 @@ def convert_MPC_packed_date_to_year_month_date(packed_date):#see http://www.mino
 
 def run_lightcurve_code(JD_helxyz_obs_xyz_array, asteroid_name, shape_model_directory, lightcurve_code, start_time_mjd, end_time_mjd, file_id):
     id_generator_lc = id_generator()
-    result_file_name = asteroid_name + '_compile_lc_' + str(int(start_time_mjd)) +'_to_' + str(int(end_time_mjd)) + '_' + id_generator_orb + '_.txt'
+    result_file_name = asteroid_name + '_compile_lc_' + str(int(start_time_mjd)) +'_to_' + str(int(end_time_mjd)) + '_' + file_id + '_.txt'
     if len(JD_helxyz_obs_xyz_array)< 1001:
         lc_file_name = 'lc'+ id_generator_lc +'.txt'
         lc_file_name_tmp = 'lc'+ id_generator_lc +'.txttmp'
