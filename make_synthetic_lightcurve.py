@@ -8,9 +8,26 @@ sample execution:
 
 TO DO :
 
-loopify the >10,000 pts
+v2: enabled code to run over 10,000 points
 
-generate 306 2 months 30 second intervals
+v3: fixed the file format for the input spin file.
+
+v4: add realistic mode!!!!
+
+it used to be 
+
+319 -39 3.603957
+2449658.0 0
+0.10 1.00 0.10 -0.50 
+
+which is wrong!
+
+it needs to be 
+
+319 -39 3.603957
+2449658.0 0
+1.00 0.10 -0.50
+0.10 
 
 test
 #306
@@ -46,16 +63,22 @@ ipython -i -- make_synthetic_lightcurve.py -an 3200 -stetss 49657 49668 0.0025
 #for paper
 
 #1291
-ipython -i -- make_synthetic_lightcurve.py -an 1291 -stetss 49627.0 49787.0 0.0003472
+python make_synthetic_lightcurve.py -an 1291 -stetss 49627.0 49787.0 0.0003472 -real 0
+python make_synthetic_lightcurve.py -an 1291 -stetss 49627.0 49787.0 0.0003472 -real 1
 
 #1388
-ipython -i -- make_synthetic_lightcurve.py -an 1388 -stetss 49627.0 49787.0 0.0003472
+python make_synthetic_lightcurve.py -an 1388 -stetss 49627.0 49787.0 0.0003472 -real 0
+python make_synthetic_lightcurve.py -an 1388 -stetss 49627.0 49787.0 0.0003472 -real 1
+
 
 #3200
-ipython -i -- make_synthetic_lightcurve.py -an 3200 -stetss 49627.0 49787.0 0.0003472
+python make_synthetic_lightcurve.py -an 3200 -stetss 49627.0 49787.0 0.0003472 -real 0
+python make_synthetic_lightcurve.py -an 3200 -stetss 49627.0 49787.0 0.0003472 -real 1
+
 
 #221
-ipython -i -- make_synthetic_lightcurve.py -an 221 -stetss 49627.0 49787.0 0.0003472
+python make_synthetic_lightcurve.py -an 221 -stetss 49627.0 49787.0 0.0003472 -real 0
+python make_synthetic_lightcurve.py -an 221 -stetss 49627.0 49787.0 0.0003472 -real 1
 
 
 must be careful you dont require the generation of more than 10,000 lightcurve datapoints. lcgenerator can't handle more than 10,000.
@@ -65,9 +88,12 @@ must be careful you dont require the generation of more than 10,000 lightcurve d
 parser = argparse.ArgumentParser()
 parser.add_argument("-an", "--asteroid_name", help="numbered name of asteriod", nargs='*')
 parser.add_argument("-stetss", "--start_time_end_time_step_size", help="start_time,end_time in MJD and step size in days 57303 57335 0.0025", nargs='*')
+parser.add_argument("-real", "--realistic", help="real mags 1 or 0", nargs='*')
 args = parser.parse_args()
 asteroid_name = str(args.asteroid_name[0])
 start_time_mjd, end_time_mjd, step_size_days = string_seperated_to_array_spaces(args.start_time_end_time_step_size,'float')
+
+realistic = int(args.realistic[0])
 
 #set up directories and located necessary files
 if not os.path.isdir('./shapemodels/'):os.system('mkdir shapemodels')
@@ -98,6 +124,32 @@ if not os.path.isdir('shapemodels/'+ asteroid_name):
     if int(damit_asteroid_number) > 1000:
         os.system('wget -r -np -nd http://astro.troja.mff.cuni.cz/projects/asteroids3D/data/archive/1001-2000/A'+ damit_asteroid_number + '.M' + model_number + '.shape.txt; mv A'+ damit_asteroid_number+ '.M' + model_number + '.shape.txt shapemodels/'+ asteroid_name)
 
+#fix the spin file
+'''
+from:
+
+319 -39 3.603957
+2449658.0 0
+0.10 1.00 0.10 -0.50 
+
+to:
+
+319 -39 3.603957
+2449658.0 0
+1.00 0.10 -0.50
+0.1
+'''
+
+spin_file_location = 'shapemodels/'+ asteroid_name + '/'  +'spin.txt.php?model_id=' + model_number
+spin_file_tmp = 'shapemodels/'+ asteroid_name + '/'  +'tmp'
+
+if not os.path.isfile(spin_file_tmp):
+    os.system('sed -n 1,2p ' + spin_file_location + ' > ' + spin_file_tmp)
+    os.system('sed -n 3p ' + spin_file_location + ' | sed \'s/^\s*.//g\' | sed \'s/^\s*.//g\' | sed \'s/^\s*.//g\' |sed \'s/^\s*.//g\' |sed \'s/^\s*.//g\' >> ' + spin_file_tmp)
+    os.system('echo "0.1" >> ' + spin_file_tmp)
+    os.system('cat ' + spin_file_tmp + ' > ' + spin_file_location)
+
+#set up orbit propagation process
 orbit_line =  grep_asteroid_from_MPCORBDAT_to_KEP_DES_format(asteroid_name,str(mpc_orb_file))
 id_generator_orb = id_generator()
 orbit_file_name = '''orbit_''' + id_generator_orb + '''.des'''
@@ -110,21 +162,24 @@ JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_top
 MJD_times = JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[:,0]-2400000.5
 
 if len(MJD_times) < 10000:
-    run_lightcurve_code(JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z, asteroid_name, shape_model_directory, lightcurve_code, start_time_mjd, end_time_mjd, id_generator_orb)
+    run_lightcurve_code(JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z, asteroid_name, shape_model_directory, lightcurve_code, start_time_mjd, end_time_mjd, id_generator_orb, realistic)
 
 if len(MJD_times) > 10000:
     fraction_left, times_around = np.modf(len(MJD_times)/10000.)
     for j in range(0, int(times_around)):
-        run_lightcurve_code(JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[int((j)*10000):int((j+1)*10000)], asteroid_name, shape_model_directory, lightcurve_code, MJD_times[int((j)*10000)], MJD_times[int((j+1)*10000)], id_generator_orb)
+        run_lightcurve_code(JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[int((j)*10000):int((j+1)*10000)], asteroid_name, shape_model_directory, lightcurve_code, MJD_times[int((j)*10000)], MJD_times[int((j+1)*10000)], id_generator_orb,realistic)
     if fraction_left > 0.0:
-        run_lightcurve_code(JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[int((j+1)*10000):], asteroid_name, shape_model_directory, lightcurve_code, MJD_times[int((j+1)*10000)], end_time_mjd, id_generator_orb)
+        run_lightcurve_code(JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[int((j+1)*10000):], asteroid_name, shape_model_directory, lightcurve_code, MJD_times[int((j+1)*10000)], end_time_mjd, id_generator_orb, realistic)
 
-result_file_name = asteroid_name + '_lc_' + str(int(start_time_mjd)) +'_to_' + str(int(end_time_mjd)) + '.txt'
+if realistic ==0:
+    result_file_name = asteroid_name + '_lc_' + str(int(start_time_mjd)) +'_to_' + str(int(end_time_mjd)) + '.txt'
+if realistic ==1:
+    result_file_name = asteroid_name + '_lc_' + str(int(start_time_mjd)) +'_to_' + str(int(end_time_mjd)) + '_realistic.txt'
 os.system('cat *_compile_lc_*'+id_generator_orb + '* > ' + result_file_name)
 os.system('rm *' + id_generator_orb + '*')
 
 '''
-JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[:,2:]
+JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[np.where((JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[:,0]> 2449747.5) & (JD_light_time_corrected_m_astro_hel_x_au_astro_hel_y_au_astro_hel_z_au_astro_toppo_x_au_astro_toppo_y_au_astro_toppo_z[:,0] < 2449749.5))]
 
 #306
 import matplotlib.pyplot as plt
@@ -294,9 +349,11 @@ plt.ylabel('Relative intensity')
 
 #1291
 import matplotlib.pyplot as plt
+import numpy as np
 plt.ion()
 plt.figure()
-JD_intensity890 = np.loadtxt('1291_lc_49657_to_49717.txt')
+#JD_intensity890 = np.loadtxt('1291_lc_49627_to_49787.txt')
+JD_intensity890 = np.loadtxt('1291_lc_49627_to_49787_realistic.txt')
 plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
 plt.xlabel('JD')
 plt.ylabel('Relative intensity')
@@ -305,7 +362,8 @@ plt.ylabel('Relative intensity')
 import matplotlib.pyplot as plt
 plt.ion()
 plt.figure()
-JD_intensity890 = np.loadtxt('1388_lc_49657_to_49717.txt')
+#JD_intensity890 = np.loadtxt('1388_lc_49627_to_49787.txt')
+JD_intensity890 = np.loadtxt('1388_lc_49627_to_49787_realistic.txt')
 plt.plot(JD_intensity890[:,0], JD_intensity890[:,1],'-')
 plt.xlabel('JD')
 plt.ylabel('Relative intensity')
@@ -315,7 +373,8 @@ plt.ylabel('Relative intensity')
 import matplotlib.pyplot as plt
 plt.ion()
 plt.figure()
-JD_intensity3200 = np.loadtxt('221_lc_49627_to_49787.txt')
+#JD_intensity3200 = np.loadtxt('221_lc_49627_to_49787.txt')
+JD_intensity3200 = np.loadtxt('221_lc_49627_to_49787_realistic.txt')
 plt.plot(JD_intensity3200[:,0], JD_intensity3200[:,1])
 plt.xlabel('JD')
 plt.ylabel('Relative intensity')
@@ -323,12 +382,23 @@ plt.ylabel('Relative intensity')
 #3200
 
 import matplotlib.pyplot as plt
+import numpy as np
+import pyslalib.slalib as sla
 plt.ion()
 plt.figure()
-#JD_intensity3200 = np.loadtxt('3200_lc_44113_to_44173.txt')
+#JD_intensity3200 = np.loadtxt('3200_lc_49720_to_49727.txt')
+#JD_intensity3200 = np.loadtxt('3200_lc_49655_to_49685.txt')
+#JD_intensity3200 = np.loadtxt('3200_lc_49627_to_49787.txt')
 JD_intensity3200 = np.loadtxt('3200_lc_49627_to_49787.txt')
-plt.plot(JD_intensity3200[:,0], JD_intensity3200[:,1])
+
+plt.plot(JD_intensity3200[:,0]-2400000.5, JD_intensity3200[:,1])
 plt.xlabel('JD')
-plt.ylabel('Relative intensity')
+#plt.ylabel('magnitude')
+plt.ylabel('relative intensity')
+#plt.savefig('3200_lightcurve_amplitude_0_width_1_slope_0.png')
+#plt.savefig('3200_lightcurve_amplitude_1_width_0.1_slope_-0.5.png')
+#plt.savefig('3200_lightcurve_amplitude_0.0_width_0.0_slope_0.0.png')
+#plt.savefig('1291_lightcurve_amplitude_1_width_0.1_slope_-0.5.png')
+plt.savefig('1291_lightcurve_amplitude_0_width_1_slope_0.png')
 
 '''

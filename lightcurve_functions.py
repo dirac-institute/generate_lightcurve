@@ -148,7 +148,7 @@ def convert_MPC_packed_date_to_year_month_date(packed_date):#see http://www.mino
     date = mpc_monthly_cycle_alphabet[packed_date[4]]
     return year, month, date
 
-def run_lightcurve_code(JD_helxyz_obs_xyz_array, asteroid_name, shape_model_directory, lightcurve_code, start_time_mjd, end_time_mjd, file_id):
+def run_lightcurve_code(JD_helxyz_obs_xyz_array, asteroid_name, shape_model_directory, lightcurve_code, start_time_mjd, end_time_mjd, file_id, realistic):
     id_generator_lc = id_generator()
     result_file_name = asteroid_name + '_compile_lc_' + str(int(start_time_mjd)) +'_to_' + str(int(end_time_mjd)) + '_' + file_id + '_.txt'
     if len(JD_helxyz_obs_xyz_array)< 1001:
@@ -179,7 +179,10 @@ def run_lightcurve_code(JD_helxyz_obs_xyz_array, asteroid_name, shape_model_dire
     os.system(lcgenerator_command)
     intensities = np.loadtxt(result_file_name)
     (JD_helxyz_obs_xyz_array[:,0], intensities)
-    JD_intensity = np.vstack((JD_helxyz_obs_xyz_array[:,0], intensities)).T
+    if realistic ==0:
+        JD_intensity = np.vstack((JD_helxyz_obs_xyz_array[:,0], intensities)).T
+    if realistic ==1:
+        JD_intensity = np.vstack((JD_helxyz_obs_xyz_array[:,0], intensities+ JD_helxyz_obs_xyz_array[:,1] -1.0)).T
     np.savetxt(result_file_name ,JD_intensity)
     os.system('rm lc'+ id_generator_lc + '*')
 
